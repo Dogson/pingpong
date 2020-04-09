@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"');
+
+$main-color: #744253;
+$second-color: #b49286;
+$player-color: #2ECC40;
+$adversary-color: #FF851B;
+
+$light-gray: #F4F4F4;
+
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  color: #333333;
+  font-weight:300;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  text-transform: uppercase;
+  font-size: 50px;
+  color: $main-color;
+}
+
+h2, h3, h4 {
+  font-weight: 300;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+}
