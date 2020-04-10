@@ -46,9 +46,11 @@ export class CurrentGame extends React.Component {
             if (errorMessage) {
                 return errorMessage;
             } else if (round.player === 0 && round.adversary === 0) {
-                errorMessage = "💪 Faites les 3 parties, quand même !"
+                errorMessage = "Faites les 3 parties, quand même ! 💪"
             } else if (round.player < 11 && round.adversary < 11) {
-                errorMessage = "😱 Les scores inscrits sont erronés !"
+                errorMessage = "Les scores inscrits sont erronés ! 😱"
+            } else if (round.player === round.adversary) {
+                errorMessage = "Une manche ex aequo ? Impossible ! 🤔"
             }
         }
         return errorMessage;
@@ -76,27 +78,30 @@ export class CurrentGame extends React.Component {
         return <Layout smallHeader> {
             this.state.endResult ? <EndScreen victory={this.state.endResult === "victory"}/> :
                 <div className={classes.currentGame}>
-                    <div className={classes.playersContainer}>
-                        <div className={classes.player}>
-                            <AvatarBox player={player} disabled small/>
-                            <span className={classes.playerName}>{player.name}</span>
+                    <div className={classes.body}>
+                        <div className={classes.playersContainer}>
+                            <div className={classes.player}>
+                                <AvatarBox player={player} disabled small/>
+                                <span className={classes.playerName}>{player.name}</span>
+                            </div>
+                            <img src={Vs} height="60"/>
+                            <div className={classes.adversary}>
+                                <AvatarBox player={adversary} disabled small/>
+                                <span className={classes.playerName}>{adversary.name}</span>
+                            </div>
                         </div>
-                        <img src={Vs} height="60"/>
-                        <div className={classes.adversary}>
-                            <AvatarBox player={adversary} disabled small/>
-                            <span className={classes.playerName}>{adversary.name}</span>
-                        </div>
-                    </div>
 
-                    <div className={classes.roundsContainer}>
-                        <Round onChangeScore={this.handleScore} round={0} score={this.state.rounds[0]}
-                               title={"Première manche"}/>
-                        <Round onChangeScore={this.handleScore} round={1} score={this.state.rounds[1]}
-                               title={"Deuxième manche"}/>
-                        <Round onChangeScore={this.handleScore} round={2} score={this.state.rounds[2]}
-                               title={"Troisième manche"}/>
+                        <div className={classes.roundsContainer}>
+                            <Round onChangeScore={this.handleScore} round={0} score={this.state.rounds[0]}
+                                   title={"Première manche"}/>
+                            <Round onChangeScore={this.handleScore} round={1} score={this.state.rounds[1]}
+                                   title={"Deuxième manche"}/>
+                            <Round onChangeScore={this.handleScore} round={2} score={this.state.rounds[2]}
+                                   title={"Troisième manche"}/>
+                        </div>
+                        {this.state.errorMessage &&
+                        <div className={classes.errorMessage}>{this.state.errorMessage}</div>}
                     </div>
-                    {this.state.errorMessage && <div className={classes.errorMessage}>{this.state.errorMessage}</div>}
                     <Button className={classes.mainBtn} variant="contained" onClick={this.submitFinalScore}>Envoyer les
                         scores</Button>
                 </div>
@@ -178,16 +183,17 @@ class EndScreen extends React.Component {
         }
 
         return <div className={classes.endScreen}>
-            {victory ?
-                <>
-                    <div className={cx(classes.message, classes.victoryMessage)}>Victoire ✌️🏆</div>
-                    <img src={victoryImg} width="100%" className={cx(classes.image, classes.victoryImage)}/>
-                </> :
-                <>
-                    <div className={cx(classes.message, classes.defeatMessage)}>Défaite 😖</div>
-                    <img src={defeatImg} width="100%" className={cx(classes.image, classes.defeatImage)}/>
-                </>}
-
+            <div className={classes.body}>
+                {victory ?
+                    <>
+                        <div className={cx(classes.message, classes.victoryMessage)}>Victoire ✌️🏆</div>
+                        <img src={victoryImg} width="100%" className={cx(classes.image, classes.victoryImage)}/>
+                    </> :
+                    <>
+                        <div className={cx(classes.message, classes.defeatMessage)}>Défaite 😖</div>
+                        <img src={defeatImg} width="100%" className={cx(classes.image, classes.defeatImage)}/>
+                    </>}
+            </div>
             <Button className={classes.mainBtn} variant="contained" onClick={() => {
                 this.setState({redirect: true})
             }}>Un autre adversaire, tout de suite !</Button>
