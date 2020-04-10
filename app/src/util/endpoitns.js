@@ -145,12 +145,68 @@ export async function submitScore(game, score) {
 
     const gameRef = db.collection("games").doc(game.id);
 
-    console.log(mappedScores);
 
-    console.log(mappedScores);
 
     return gameRef.update({scores: mappedScores, winner: winnerRef})
         .then(() => {
             return victory;
         });
+}
+
+export async function resetAllGames() {
+    db.collection("games").get().then((snap) => {
+        snap.forEach((doc) => {
+            doc.ref.update({
+                scores: null,
+                winner: null
+            })
+        })
+    })
+}
+
+export async function getAllResults(players) {
+    if (!players) {
+        return null;
+    } else {
+        return getAllGames()
+            .then((games) => {
+                let results = players.map((player) => {
+                    let win = 0;
+                    games.forEach((game) => {
+                        if (game.data().winner && game.data().winner.id === player.id) {
+                            win++;
+                        }
+                    });
+                    return {
+                        ...player,
+                        wins: win
+                    }
+                }).sort((x, y) => {
+                    if (x.wins > y.wins)
+                        return -1;
+                    else return 1;
+                });
+                const rankings = {...results};
+
+                let sameRank = 0;
+                results.forEach((result, i) => {
+                    if (i === 0)  {
+                        rankings[i].rank = 1;
+                        sameRank = 1;
+                    }
+                    else {
+                        if (rankings[i].wins === rankings[i-1].wins) {
+                            sameRank++;
+                            rankings[i].rank = rankings[i-1].rank
+                        }
+                        else {
+                            rankings[i].rank = rankings[i-1].rank + sameRank;
+                            sameRank = 1;
+                        }
+                    }
+                });
+
+                return rankings;
+            })
+    }
 }

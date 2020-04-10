@@ -1,7 +1,7 @@
 import {getAdversary} from "../util/utils";
 import classes from "./currentGame.module.scss";
 import React from "react";
-import {AvatarBox} from "./avatarBox";
+import {AvatarBox} from "../components/avatarBox";
 import Button from '@material-ui/core/Button';
 import {submitScore} from "../util/endpoitns";
 import cx from "classnames";
@@ -15,12 +15,33 @@ const defeatImg = require("./defeat.gif");
 export class CurrentGame extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            rounds: [
+
+        const game = this.props.location.state;
+        const currentPlayer = JSON.parse(localStorage.getItem("currentPlayer"));
+
+        const mappedScores = [];
+        let currentPlayerIdx = game.player1.id === currentPlayer.id ? 0 : 1;
+        let adversaryIdx = currentPlayerIdx === 0 ? 1 : 0;
+
+        let rounds;
+        if (!game.scores) {
+            rounds =  [
                 {player: 0, adversary: 0},
                 {player: 0, adversary: 0},
                 {player: 0, adversary: 0}
-            ],
+            ]
+        }
+        else {
+            rounds = [];
+            for (let i = 0; i < 3 ; i++) {
+                rounds[i] = {};
+                rounds[i].player = game.scores[i][currentPlayerIdx];
+                rounds[i].adversary = game.scores[i][adversaryIdx]
+            }
+        }
+
+        this.state = {
+            rounds,
             errorMessage: null,
             endResult: false,
         };
@@ -102,8 +123,9 @@ export class CurrentGame extends React.Component {
                         {this.state.errorMessage &&
                         <div className={classes.errorMessage}>{this.state.errorMessage}</div>}
                     </div>
-                    <Button className={classes.mainBtn} variant="contained" onClick={this.submitFinalScore}>Envoyer les
-                        scores</Button>
+                    <Button className={classes.mainBtn} variant="contained" onClick={this.submitFinalScore}>
+                        {game.scores ? "Modifier les scores" : "Envoyer les scores"}
+                    </Button>
                 </div>
         }
         </Layout>

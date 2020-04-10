@@ -9,7 +9,7 @@ export class AvatarBox extends React.Component {
     }
 
     render() {
-        const {player, small, disabled, game} = this.props;
+        const {player, small, disabled, game, smallest} = this.props;
         const {name, avatar, color} = player;
 
         let gameResult = null;
@@ -22,14 +22,12 @@ export class AvatarBox extends React.Component {
             }
         }
 
-        console.log(!!gameResult);
-
-        return <div className={cx(classes.avatarBox, {[classes.small]: small})}>
-            <div className={classes.image} onClick={() => !disabled && !gameResult && this.props.onClick(player)}>
+        return <div className={cx(classes.avatarBox, {[classes.small]: small}, {[classes.smallest]: smallest})}>
+            <div className={cx(classes.image, classes[gameResult])} onClick={() => !disabled && this.props.onClick(player)}>
                 {gameResult && <div className={cx(classes.gameResult, classes[gameResult])}>
                     {gameResult === "victory" ?
-                        <span>Victoire 🏆</span> :
-                        <span>Défaite 😖</span>
+                        <span>🏆 Victoire</span> :
+                        <span>😖 Défaite</span>
                     }
                 </div>}
                 <img src={avatar} style={{position: "absolute", top: 0, left: 0}}

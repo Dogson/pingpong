@@ -1,4 +1,4 @@
-@import "../global";
+@import "src/global";
 
 .currentGame {
   width: 100%;
@@ -115,6 +115,7 @@
 
   .image {
     margin-bottom: 40px;
+    border-radius: 5px;
   }
 
   .defeatImage {
