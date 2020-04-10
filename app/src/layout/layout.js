@@ -5,7 +5,7 @@ import {Helmet} from "react-helmet";
 
 export const Layout = ({children, smallHeader}) => {
     return <div className={classes.wrapper}>
-        <Helmet title="Ping Pong"/>
+        <Helmet title="Ping-Pong"/>
         <div className={classes.container}>
             <PageTitle small={smallHeader}/>
             {children}
