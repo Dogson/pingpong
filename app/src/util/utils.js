@@ -1,4 +1,5 @@
 export const getAdversary = (game) => {
+    debugger;
     const players = JSON.parse(localStorage.getItem("players"));
     const currentPlayer = JSON.parse(localStorage.getItem("currentPlayer"));
     if (game.player1.id === currentPlayer.id) {

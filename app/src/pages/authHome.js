@@ -7,7 +7,7 @@ import {getAllPlayers, getUnplayedGame} from "../util/endpoitns";
 import {Redirect} from "react-router-dom";
 import {AvatarBox} from "../components/avatarBox";
 import {getAdversary} from "../util/utils";
-import {CurrentGame} from "../components/currentGame";
+import {cloneDeep} from "lodash";
 
 
 export class AuthHome extends React.Component {
@@ -29,6 +29,19 @@ export class AuthHome extends React.Component {
             })
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.state.currentGame && !prevState.currentGame) {
+            this.props.history.push({
+                pathname: '/game',
+                state: {
+                    id: this.state.currentGame.id,
+                    player1: {id: this.state.currentGame.player1.id},
+                    player2: {id: this.state.currentGame.player2.id}
+                }
+            })
+        }
+    }
+
     logout() {
         localStorage.removeItem("currentPlayer");
         this.setState({currentPlayer: null})
@@ -44,9 +57,7 @@ export class AuthHome extends React.Component {
             return <Redirect to={"/"}/>
         }
         return <Layout smallHeader>
-            {currentGame ?
-                <CurrentGame game={currentGame}/> :
-                <UnplayedGames games={unplayedGames} onClick={this.handleGameClick} handleLogout={this.logout}/>}
+            <UnplayedGames games={unplayedGames} onClick={this.handleGameClick} handleLogout={this.logout}/>
         </Layout>
     }
 };

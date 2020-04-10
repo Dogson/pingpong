@@ -41,7 +41,7 @@ class WhoAreYou extends React.Component {
 
     render() {
         if (localStorage.getItem("currentPlayer")) {
-            return <Redirect to={"/current-games"}/>
+            return <Redirect to={"/home"}/>
         }
         return <div className={classes.whoAreYou}>
             <h2 className={classes.title}>Qui es-tu ?</h2>

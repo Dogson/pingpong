@@ -1,3 +1,5 @@
+import {getAdversary} from "./utils";
+
 const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
@@ -109,5 +111,46 @@ export async function getUnplayedGame(player) {
 }
 
 export async function submitScore(game, score) {
+    let victory = false;
+    let nbVictory = 0;
+    for (let i = 0; i < 3; i++) {
+        if (score[i].player > score[i].adversary) {
+            nbVictory++;
+        }
+    }
+    if (nbVictory >= 2) {
+        victory = true;
+    }
 
+    const currentPlayer = JSON.parse(localStorage.getItem("currentPlayer"));
+    const mappedScores = {};
+    for (let i = 0; i < 3; i++) {
+        let round = score[i];
+
+        const idxCurrentPlayer = game.player1.id === currentPlayer.id ? 0 : 1;
+
+        mappedScores[i] = [];
+
+        if (idxCurrentPlayer === 0) {
+            mappedScores[i].push(round.player);
+            mappedScores[i].push(round.adversary);
+        } else {
+            mappedScores[i].push(round.adversary);
+            mappedScores[i].push(round.player);
+        }
+    }
+
+    const winnerId = victory ? currentPlayer.id : getAdversary(game).id;
+    const winnerRef = db.collection("players").doc(winnerId);
+
+    const gameRef = db.collection("games").doc(game.id);
+
+    console.log(mappedScores);
+
+    console.log(mappedScores);
+
+    return gameRef.update({scores: mappedScores, winner: winnerRef})
+        .then(() => {
+            return victory;
+        });
 }

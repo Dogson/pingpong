@@ -32,3 +32,17 @@ button {
   background-color: transparent;
   border: none;
 }
+
+.mainBtn {
+  color: white !important;
+  background-color: $main-color !important;
+  padding: 10px !important;
+  width: 100%;
+  margin-top: 10px;
+  //font-family: 'Montserrat', sans-serif !important;
+
+  &:active {
+    color: white;
+    background-color: $main-color;
+  }
+}

@@ -4,10 +4,14 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    BrowserHistory
 } from "react-router-dom";
 import {Home} from "./pages/home";
 import {AuthHome} from "./pages/authHome";
+import {CurrentGame} from "./components/currentGame";
+import { createBrowserHistory } from 'history'
+
 
 // initGames();
 
@@ -16,12 +20,9 @@ function App() {
     return (
         <Router>
             <Switch>
-                <Route exact path="/">
-                    <Home />
-                </Route>
-                <Route exact path="/current-games">
-                    <AuthHome />
-                </Route>
+                <Route exact path="/" component={Home}/>
+                <Route exact path="/home" component={AuthHome}/>
+                <Route exact path="/game" component={CurrentGame}/>
             </Switch>
         </Router>
     );
