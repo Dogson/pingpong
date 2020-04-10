@@ -12,3 +12,15 @@ export const getAdversary = (game) => {
         });
     }
 };
+
+export const hasWon = (game, player) => {
+    return game.winner && game.winner.id === player.id
+}
+
+
+export const hasLost = (game, player) => {
+    if (!game.winner)
+        return false;
+    if (game.winner.id !== player.id)
+        return true;
+}

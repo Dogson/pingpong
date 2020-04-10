@@ -3,7 +3,7 @@ import React from "react";
 import {Layout} from "../layout/layout";
 import {APP_CONFIG} from "../config/appConfig";
 import {GameWidget} from "../components/gameWidget";
-import {getAllPlayers, getUnplayedGame} from "../util/endpoitns";
+import {getAllPlayers, getPlayerGames} from "../util/endpoitns";
 import {Redirect} from "react-router-dom";
 import {AvatarBox} from "../components/avatarBox";
 import {getAdversary} from "../util/utils";
@@ -23,7 +23,8 @@ export class AuthHome extends React.Component {
     }
 
     componentDidMount() {
-        this.state.currentPlayer && getUnplayedGame(this.state.currentPlayer)
+        console.log("kekekek");
+        this.state.currentPlayer && getPlayerGames(this.state.currentPlayer)
             .then((games) => {
                 this.setState({unplayedGames: games});
             })
@@ -69,7 +70,7 @@ const UnplayedGames = ({games, onClick, handleLogout}) => {
         <p>Choisis ton adversaire :</p>
         <div className={classes.advContainer}>
             {games && games.map((game) => {
-                return <AvatarBox player={getAdversary(game)} onClick={() => onClick(game)}/>
+                return <AvatarBox game={game} player={getAdversary(game)} onClick={() => onClick(game)}/>
             })}
         </div>
 

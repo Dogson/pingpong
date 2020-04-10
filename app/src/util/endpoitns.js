@@ -83,7 +83,7 @@ export async function getAllPlayers() {
     });
 }
 
-export async function getUnplayedGame(player) {
+export async function getPlayerGames(player) {
     const id = player.id;
 
     const playerRef = db.collection("players").doc(id);
